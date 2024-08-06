@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuclei Scanner</title>
+    <title>Nuclei Notify Cmdline</title>
     <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/3/34/Icon_hacker.png">
     <style>
         body {
@@ -22,7 +22,7 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 100px;
+            padding: 20px;
             max-width: 800px;
             width: 100%;
             text-align: center;
@@ -32,7 +32,7 @@
         }
         textarea, input {
             width: 100%;
-            margin-bottom: 100px;
+            margin-bottom: 20px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -43,7 +43,7 @@
         }
         pre {
             background-color: #f7f7f7;
-            padding: 100px;
+            padding: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow-x: auto;
@@ -53,7 +53,7 @@
             font-family: 'Courier New', Courier, monospace;
         }
         button {
-            padding: 10px 100px;
+            padding: 10px 20px;
             font-size: 16px;
             color: #fff;
             background-color: #0073e6;
@@ -70,7 +70,7 @@
             color: white;
         }
         footer {
-            margin-top: 100px;
+            margin-top: 20px;
             font-size: 14px;
             color: #888;
         }
@@ -84,25 +84,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>Nuclei SCANNER</h1>
+        <h1>Nuclei Notify Command Generator</h1>
         <input type="text" id="templateInput" placeholder="Enter Nuclei template path:" />
         <input type="text" id="filepathInput" placeholder="Enter Subdomain path:" />
         <textarea id="wordsInput" placeholder="Enter Subdomains.txt, one per line:"></textarea>
         <button onclick="generateCommands()">Generate Commands</button>
+        <button onclick="copyAllCommands()">Copy All Commands</button>
         <div id="output"></div>
         <div id="savedCommands"></div>
         <footer>Powered by Professor Software Solutions</footer>
     </div>
 
     <script>
+        let allCommands = ''; // Store all commands for the "Copy All" functionality
+
         // Function to generate commands
         function generateCommands() {
             const template = document.getElementById('templateInput').value.trim();
             const filepath = document.getElementById('filepathInput').value.trim();
             const words = document.getElementById('wordsInput').value.split('\n').filter(word => word.trim());
-            const output = words.map(word => `nuclei -l ${filepath}/${word.trim()} ${template} -o ${word.trim()}.output && cat ${word.trim()}.output | notify -provider discord -id cmdline`).join('\n');
-            displayCommands(output);
-            saveCommands(output);
+            allCommands = words.map(word => `nuclei -l ${filepath}/${word.trim()} ${template} -o ${word.trim()}.output && cat ${word.trim()}.output | notify -provider discord -id cmdline`).join('\n');
+            displayCommands(allCommands);
+            saveCommands(allCommands);
         }
 
         // Function to display commands
@@ -110,14 +113,14 @@
             const lines = commands.split('\n');
             let resultHTML = '';
 
-            for (let i = 0; i < lines.length; i += 100) {
-                const chunk = lines.slice(i, i + 100).join('\n');
-                resultHTML += `<pre id="output-${i / 100}">${chunk}</pre>`;
-                if (i + 100 < lines.length) {
-                    const copyButton = `<button onclick="copyToClipboard('output-${i / 100}', this)">Copy Lines ${i + 1}-${i + 100}</button>`;
+            for (let i = 0; i < lines.length; i += 20) {
+                const chunk = lines.slice(i, i + 20).join('\n');
+                resultHTML += `<pre id="output-${i / 20}">${chunk}</pre>`;
+                if (i + 20 < lines.length) {
+                    const copyButton = `<button onclick="copyToClipboard('output-${i / 20}', this)">Copy Lines ${i + 1}-${i + 20}</button>`;
                     resultHTML += `<div>${copyButton}</div>`;
                 } else {
-                    const copyButton = `<button onclick="copyToClipboard('output-${i / 100}', this)">Copy Lines ${i + 1}-${lines.length}</button>`;
+                    const copyButton = `<button onclick="copyToClipboard('output-${i / 20}', this)">Copy Lines ${i + 1}-${lines.length}</button>`;
                     resultHTML += `<div>${copyButton}</div>`;
                 }
             }
@@ -134,6 +137,15 @@
                     button.classList.add('clicked');
                 })
                 .catch(err => console.error('Failed to copy:', err));
+        }
+
+        // Function to copy all commands at once
+        function copyAllCommands() {
+            navigator.clipboard.writeText(allCommands)
+                .then(() => {
+                    console.log('All commands copied to clipboard');
+                })
+                .catch(err => console.error('Failed to copy all commands:', err));
         }
 
         // Function to save commands to localStorage
