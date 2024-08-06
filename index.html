@@ -22,7 +22,7 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 100px;
             max-width: 800px;
             width: 100%;
             text-align: center;
@@ -32,7 +32,7 @@
         }
         textarea, input {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 100px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -43,7 +43,7 @@
         }
         pre {
             background-color: #f7f7f7;
-            padding: 20px;
+            padding: 100px;
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow-x: auto;
@@ -53,7 +53,7 @@
             font-family: 'Courier New', Courier, monospace;
         }
         button {
-            padding: 10px 20px;
+            padding: 10px 100px;
             font-size: 16px;
             color: #fff;
             background-color: #0073e6;
@@ -70,7 +70,7 @@
             color: white;
         }
         footer {
-            margin-top: 20px;
+            margin-top: 100px;
             font-size: 14px;
             color: #888;
         }
@@ -110,14 +110,14 @@
             const lines = commands.split('\n');
             let resultHTML = '';
 
-            for (let i = 0; i < lines.length; i += 20) {
-                const chunk = lines.slice(i, i + 20).join('\n');
-                resultHTML += `<pre id="output-${i / 20}">${chunk}</pre>`;
-                if (i + 20 < lines.length) {
-                    const copyButton = `<button onclick="copyToClipboard('output-${i / 20}', this)">Copy Lines ${i + 1}-${i + 20}</button>`;
+            for (let i = 0; i < lines.length; i += 100) {
+                const chunk = lines.slice(i, i + 100).join('\n');
+                resultHTML += `<pre id="output-${i / 100}">${chunk}</pre>`;
+                if (i + 100 < lines.length) {
+                    const copyButton = `<button onclick="copyToClipboard('output-${i / 100}', this)">Copy Lines ${i + 1}-${i + 100}</button>`;
                     resultHTML += `<div>${copyButton}</div>`;
                 } else {
-                    const copyButton = `<button onclick="copyToClipboard('output-${i / 20}', this)">Copy Lines ${i + 1}-${lines.length}</button>`;
+                    const copyButton = `<button onclick="copyToClipboard('output-${i / 100}', this)">Copy Lines ${i + 1}-${lines.length}</button>`;
                     resultHTML += `<div>${copyButton}</div>`;
                 }
             }
